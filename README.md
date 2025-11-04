@@ -1,5 +1,9 @@
 ## Batch Process API
 
+## Overview
+
+This project contains a Mule application designed to synchronize data between Salesforce and a MySql database. The application supports bidirectional real-time synchronization, ensuring that data changes in either Salesforce or Supabase are reflected in the other system.
+
 This template leverages the batch module.
 
 The batch job is divided into Process and On Complete stages.
@@ -14,7 +18,7 @@ Failing to do so can lead to unexpected behavior of the template.
 
 This template illustrates the migration use case between a database and Salesforce, thus it requires a database instance to work.
 
-Database Considerations
+## Database Considerations
 This template uses date time or timestamp fields from the database to do comparisons and take further actions.
 
 While the template handles the time zone by sending all such fields in a neutral time zone, it cannot handle time offsets.
@@ -26,12 +30,65 @@ Take this in consideration and take the actions needed to avoid the time offset.
 As a Data Source
 There are no considerations with using a database as a data origin.
 
-Salesforce Considerations
+## Salesforce Considerations
 Here's what you need to know about Salesforce to get this template to work:
 
 Where can I check that the field configuration for my Salesforce instance is the right one? See: Salesforce: Checking Field Accessibility for a Particular Field
 How can I modify the Field Access Settings? See: Salesforce: Modifying Field Access Settings
-As a Data Destination
+
+## Setup
+
+### Prerequisites
+
+- Java JDK 8 or later
+- Maven
+- Mule Runtime
+- Anypoint Studio
+- Supabase account
+- Salesforce account with custom objects
+- OData 2.0 Plugin
+
+### Installation
+
+1. **Clone the Repository:**
+
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
+
+2. **Build the Project Using Maven:**
+
+   ```bash
+   mvn clean install
+   ```
+
+3. **Configure Salesforce and Supabase:**
+
+   **Salesforce:**
+
+   - **Obtain Salesforce Access Token:**
+     - Log in to Salesforce.
+     - Navigate to Setup and search for API to find details on accessing Salesforce APIs.
+     - Use Salesforce’s OAuth 2.0 credentials (Consumer Key and Consumer Secret) to obtain an access token using Postman or a similar tool.
+
+   - **Configure Salesforce in MuleSoft:**
+     - Open Anypoint Studio.
+     - Go to the Global Elements tab.
+     - Add a new Salesforce configuration with the obtained Access Token.
+
+   **Database:**
+
+   - **Create a Database:**
+     - Set up your database schema as required.
+
+
+4. **Open the Project in Anypoint Studio (Optional):**
+
+   - Open Anypoint Studio.
+   - Import the project as an existing Mule project by selecting File > Import > Existing Mule Project.
+
+## As a Data Destination
 There are no considerations with using Salesforce as a data destination.
 
 Run it!
@@ -58,7 +115,7 @@ In Studio, click the Exchange X icon in the upper left of the taskbar, log in wi
 
 Anypoint Platform credentials, search for the template, and click Open.
 
-Run on Studio
+## Run on Studio
 After you import your template into Anypoint Studio, follow these steps to run it:
 
 Locate the properties file mule.dev.properties, in src/main/resources.
@@ -73,7 +130,7 @@ Complete all properties in one of the property files, for example in mule.prod.p
 
 After this, to trigger the use case you need to browse to the local HTTP connector with the port you configured in your file. For instance, for 9090 browse to http://localhost:9090/migrateaccounts and this outputs a summary report and sends it to the emails configured.
 
-Run on CloudHub
+## Run on CloudHub
 While creating your application on CloudHub (or you can do it later as a next step), go to Runtime Manager > Manage Application > Properties to set the environment variables listed in "Properties to Configure" as well as the mule.env.
 
 Once your app is all set and started, if you choose as a domain name db2sfdcaccountmigration to trigger the use case, browse to http://db2sfdcaccountmigration.cloudhub.io/migrateaccounts and report is sent to the emails configured.
@@ -81,39 +138,47 @@ Once your app is all set and started, if you choose as a domain name db2sfdcacco
 Deploy your Anypoint Template on CloudHub
 Studio provides an easy way to deploy your template directly to CloudHub, for the specific steps to do so check this
 
-Properties to Configure
+## Properties to Configure
 To use this template, configure properties (credentials, configurations, etc.) in the properties file or in CloudHub from Runtime Manager > Manage Application > Properties. The sections that follow list example values.
 
-Application Configuration
+## Application Configuration
 HTTP Connector Configuration
-
+```bash
 http.port 9090
+```
 Batch Aggregator Configuration
-
+```bash
 page.size 1000
+```
 Database Connector Configuration
-
+```bash
 db.host localhost
 db.port 3306
 db.user user-nameA
 db.password user-passwordA
 db.databasename dbnameA
+```
 SalesForce Connector Configuration
-
+```bash
 sfdc.username joan.baez@org
 sfdc.password JoanBaez456
 sfdc.securityToken ces56arl7apQs56XTddf34X
+```
 SMTP Services configuration
-
+```bash
 smtp.host smtp.gmail.com
 smtp.port 587
 smtp.user email%40example.com
 smtp.password password
-Email Details
+```
 
+Email Details
+```bash
 mail.from batch.migrateaccounts.migration%40mulesoft.com
 mail.to your.email@gmail.com
 mail.subject Batch Job Finished Report
+```
+
 ## API Calls
 Salesforce imposes limits on the number of API calls that can be made. Therefore calculating this amount is important. This template's calls to the API can be calculated using this formula:
 
@@ -128,10 +193,10 @@ As Mule applications are based on XML files, this page describes the XML files u
 
 More files are available such as test classes and Mule application files, but to keep it simple, we focus on these XML files:
 
-### 1. config.xml
-### 2.businessLogic.xml
-### 3.endpoints.xml
-### 4.errorHandling.xml
+- config.xml
+- businessLogic.xml
+- endpoints.xml
+- errorHandling.xml
 
 ## config.xml
 Configuration for connectors and configuration properties are set in this file. Even change the configuration here, all parameters that can be modified are in properties file, which is the recommended place to make your changes. However if you want to do core changes to the logic, you need to modify this file.
@@ -161,3 +226,9 @@ The endpoint is a request-response and a result of calling it is the response wi
 This is the right place to handle how your integration reacts depending on the different exceptions.
 
 This file provides error handling that is referenced by the main flow in the business logic.
+
+
+## Additional Documentation
+
+- [MuleSoft Anypoint Studio Documentation](https://docs.mulesoft.com/studio/)
+- [Salesforce Lightning App Builder](https://trailhead.salesforce.com/content/learn/modules/lightning_app_builder)
